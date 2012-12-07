@@ -1,18 +1,39 @@
+/*
+ * Amarok.java
+ *
+ * Amarok plugin for Coversal (http://www.coversal.com)
+ *
+ * Copyright (C) 2012 Zokama <zokama@coversal.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 package com.coversal.plugin.amarok;
 
-import android.os.RemoteException;
-
 import com.coversal.plugin.sshlib.DBusController;
-import com.coversal.plugin.sshlib.Ssh;
+import com.coversal.plugin.sshlib.SshProfile;
 import com.coversal.ucl.api.ControllerAPI;
 import com.coversal.ucl.api.TextParameter;
-import com.coversal.ucl.plugin.PluginAnnouncer;
+import com.coversal.ucl.plugin.ProfileAnnouncer;
 
 
-public class Amarok extends Ssh {
+public class Amarok extends SshProfile {
 
 	public  final static String PROFILE_NAME = "Amarok";
-	private final static String LAYOUT_NAME = "SSHmote";
+	private final static String LAYOUT_NAME = "coversal1";
 	
 	class AmarokController  extends DBusController {
 		
@@ -22,7 +43,7 @@ public class Amarok extends Ssh {
 			
 			defineCommand(START_PLAY, "amarok -p %s", true);
 			defineCommand(PLAY_FOLDER, "amarok -p %s", true);
-			defineCommand(ENQUEUE_FOLDER, "amarok -a %s", true);
+			defineCommand(ADD_TO_PLAYLIST, "amarok -a %s", true);
 			defineCommand(PLAY_PAUSE, "/Player Pause", true);
 			defineCommand(STOP, "/Player Stop", true);
 			defineCommand(POWER, "", true);
@@ -46,8 +67,10 @@ public class Amarok extends Ssh {
 		}
 	}
 
+	
+	
 
-	public Amarok(PluginAnnouncer pa) {
+	public Amarok(ProfileAnnouncer pa) {
 		super(pa);
 		
 		setOptionValue(OPTION_STARTUP, START_OPTION_REMOTE);
@@ -66,7 +89,12 @@ public class Amarok extends Ssh {
 	AmarokController controller = new AmarokController();
 	
 	@Override
-	public ControllerAPI getController() throws RemoteException {
+	public ControllerAPI getController() {
 		return controller;
 	}
+
+//	@Override
+//	public PlaylistManager getPlaylistManager() {
+//		return null;
+//	}
 }
